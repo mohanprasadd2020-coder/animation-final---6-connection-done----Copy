@@ -1,0 +1,13 @@
+torch
+torchvision
+torchaudio
+diffusers
+animatediff
+opencv-python
+moviepy
+pytesseract
+spacy
+en_core_web_sm
+pyttsx3
+flask
+numpy

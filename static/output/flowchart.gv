@@ -1,0 +1,30 @@
+digraph {
+	0 [label="ENVIRONMENT POLLUTION - Types, Causes and Effects
+Pollution is the introduction of harmful or unwanted substances into the
+natural environment that cause damage to air, water, soil, and living
+organisms."]
+	1 [label="These substances, known as pollutants, can be chemical,
+physical, or biological in nature."]
+	0 -> 1
+	2 [label="Pollution disrupts the balance of
+ecosystems, affects climate patterns, and creates serious risks to human
+health and wildlife."]
+	1 -> 2
+	3 [label="With increasing industrialization and urbanization,
+environmental pollution has become one of the most critical global
+problems."]
+	2 -> 3
+	4 [label="Types of Environmental Pollution
+Air pollution occurs when harmful gases, smoke, dust, and particulate
+matter are released into the atmosphere from vehicles, factories, power
+plants, and burning of fossil fuels."]
+	3 -> 4
+	5 [label="These pollutants reduce air quality
+and lead to respiratory diseases such as asthma and bronchitis."]
+	4 -> 5
+	6 [label="Water
+pollution happens when rivers, lakes, oceans, and groundwater are
+contaminated by sewage, industrial waste, oil spills, and plastic
+materials."]
+	5 -> 6
+}

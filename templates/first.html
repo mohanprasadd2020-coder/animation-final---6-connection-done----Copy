@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edumorph</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Playfair+Display:ital@1&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #3b1d5a, #12002b, #1a2a6c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .wrapper {
+            text-align: center;
+            position: relative;
+        }
+
+        /* OWL */
+        .owl {
+            width: 170px;
+            margin: 0 auto 30px;
+            animation: owlAppear 1.5s ease forwards;
+            position: relative;
+            z-index: 5;
+        }
+
+        .owl img {
+            width: 100%;
+            animation: glowPulse 3s infinite ease-in-out;
+        }
+
+        /* MAGIC AREA */
+        .magic-area {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 220px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #fff, #b58bff);
+            border-radius: 50%;
+            animation: sparkleFloat 4s infinite ease-in-out;
+            opacity: 0;
+            filter: blur(1px);
+        }
+
+        .sparkle:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .sparkle:nth-child(2) {
+            left: 50%;
+            animation-delay: 1s;
+        }
+
+        .sparkle:nth-child(3) {
+            left: 70%;
+            animation-delay: 2s;
+        }
+
+        .sparkle:nth-child(4) {
+            left: 35%;
+            animation-delay: 2.5s;
+        }
+
+        .sparkle:nth-child(5) {
+            left: 60%;
+            animation-delay: 3s;
+        }
+
+        /* LOGO TEXT */
+        .logo-text {
+            font-family: "Allura", cursive;
+            font-size: 86px;
+            letter-spacing: 2px;
+        }
+
+        .logo-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: letterAppear 0.6s ease forwards;
+        }
+
+        /* TAGLINE */
+        .tagline {
+            margin-top: 10px;
+            font-family: "Playfair Display", serif;
+            font-size: 17px;
+            font-style: italic;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 3s;
+        }
+
+        /* ANIMATIONS */
+        @keyframes owlAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.6);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                filter: drop-shadow(0 0 10px #b58bff);
+            }
+
+            50% {
+                filter: drop-shadow(0 0 30px #e2c6ff);
+            }
+
+            100% {
+                filter: drop-shadow(0 0 10px #b58bff);
+            }
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                transform: translateY(40px) scale(0.3);
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-60px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes letterAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 0.85;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <!-- MAGIC SPARKLES -->
+        <div class="magic-area">
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+            <span class="sparkle"></span>
+        </div>
+
+        <!-- OWL -->
+        <div class="owl">
+            <img src="https://i.postimg.cc/5y1LLfjY/Whats-App-Image-2026-01-25-at-10-43-42-PM.png">
+        </div>
+
+        <!-- LOGO -->
+        <div class="logo-text" id="logoText">
+            <span>E</span><span>d</span><span>u</span><span>m</span><span>o</span><span>r</span><span>p</span><span>h</span><span>.</span>
+        </div>
+
+        <div class="tagline">Transforming books into visual learning</div>
+
+    </div>
+
+    <script>
+        const letters = document.querySelectorAll("#logoText span");
+        letters.forEach((letter, index) => {
+            letter.style.animationDelay = `${1.2 + index * 0.18}s`;
+        });
+       
+  // After animation ends, allow tap to go next page
+   setTimeout(() => {
+    document.body.style.cursor = "pointer";
+
+    document.body.addEventListener("click", () => {
+      window.location.href = "/owl";   // ✅ Flask route
+    });
+
+    document.body.addEventListener("touchstart", () => {
+      window.location.href = "/owl";   // ✅ Mobile support
+    });
+  }, 4000);
+    </script>
+
+</body>
+
+</html>

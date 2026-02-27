@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edumorph | Authentication</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        height: 100vh;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(99, 102, 241, 0.35),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(168, 85, 247, 0.35),
+            transparent 45%
+          ),
+          linear-gradient(135deg, #05010d, #0b0218, #030008);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: white;
+        padding: 40px;
+        gap: 60px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Stars Background */
+      .stars {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .star {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+        animation:
+          twinkle 3s infinite,
+          glow 3s infinite;
+        box-shadow:
+          0 0 8px rgba(255, 255, 255, 0.9),
+          0 0 16px rgba(99, 102, 241, 0.7),
+          0 0 24px rgba(168, 85, 247, 0.5);
+      }
+
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow:
+            0 0 4px rgba(255, 255, 255, 0.5),
+            0 0 8px rgba(99, 102, 241, 0.4),
+            0 0 12px rgba(168, 85, 247, 0.2);
+          filter: blur(0px);
+        }
+        50% {
+          box-shadow:
+            0 0 12px rgba(255, 255, 255, 1),
+            0 0 24px rgba(99, 102, 241, 0.9),
+            0 0 36px rgba(168, 85, 247, 0.7);
+          filter: blur(0.5px);
+        }
+      }
+
+      @keyframes owlFly {
+        from {
+          transform: translate(-100vw, 100vh) scale(0.4) rotate(-15deg);
+        }
+        to {
+          transform: translate(-50%, -20%) scale(1) rotate(0deg);
+        }
+      }
+
+      /* OWL SIDE */
+      .owl-section {
+        position: fixed;
+        bottom: -70px;
+        left: 230px;
+        width: auto;
+        height: auto;
+        z-index: 100;
+      }
+
+      .owl-wrapper {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        animation: owlFly 3.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+      }
+
+      .owl-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.6));
+      }
+
+      .bubble {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) scale(0);
+        width: 280px;
+        background: white;
+        padding: 22px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        border: 3px solid #ffcf4b;
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        font-size: 1rem;
+        color: #222;
+        line-height: 1.4;
+      }
+
+      .bubble.active {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+
+      /* LOGIN CARD SIDE */
+      .login-section {
+        position:fixed;
+        size: 70px;;
+        left:580px;
+        margin-left: auto;
+        margin-right: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.8s ease-in;
+        z-index: 50;
+      }
+
+      .login-section.show {
+        opacity: 1;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 420px;
+        padding: 35px;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        border-radius: 22px;
+        box-shadow: 0 0 45px rgba(99, 102, 241, 0.45);
+        text-align: center;
+      }
+
+      .title {
+        font-family: "Great Vibes", cursive;
+        font-size: 56px;
+        text-shadow:
+          0 0 25px rgba(168, 85, 247, 0.8),
+          0 0 45px rgba(99, 102, 241, 0.9);
+        margin-bottom: 10px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #d6d3ff;
+        margin-bottom: 25px;
+      }
+
+      .input {
+        position: relative;
+        margin: 12px 0;
+      }
+
+      .input input {
+        width: 100%;
+        padding: 12px 40px 12px 14px;
+        border: none;
+        border-radius: 12px;
+        outline: none;
+        background: rgba(255, 255, 255, 0.12);
+        color: white;
+      }
+
+      .input input::placeholder {
+        color: #cfd0ff;
+      }
+
+      .eye {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #cfd0ff;
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+      }
+
+      .switch {
+        margin-top: 18px;
+        font-size: 13px;
+      }
+
+      .switch span {
+        color: #a855f7;
+        cursor: pointer;
+      }
+
+      .error {
+        font-size: 12px;
+        color: #ff6b6b;
+        display: none;
+        margin-top: 6px;
+      }
+
+      #signup {
+        display: none;
+      }
+
+      @media (max-width: 1024px) {
+        body {
+          flex-direction: column;
+          padding: 20px;
+          gap: 30px;
+        }
+
+        .owl-section {
+          flex: none;
+        }
+
+        .login-section {
+          flex: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- STARS BACKGROUND -->
+    <div class="stars" id="starsContainer"></div>
+    <!-- OWL SECTION -->
+    <div class="owl-section">
+      <div class="owl-wrapper" id="owlBox">
+        <div class="bubble" id="bubble">
+          <div id="text"></div>
+        </div>
+        <img
+          src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzEzODF2MDRtOHJyNXJkeXo0bTdwZ3RwaXpvYjF4YWgyYXYwdnZ0cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/PH8P1olwfTqwemlR5G/200.webp"
+          class="owl-img"
+          id="owlImg"
+        />
+      </div>
+    </div>
+
+    <!-- LOGIN SECTION -->
+    <div class="login-section">
+      <div class="card">
+        <div class="title">Edumorph</div>
+        <div class="subtitle">Transforming books into visual learning</div>
+
+        <!-- SIGN IN -->
+        <div id="signin">
+          <div class="input">
+            <input type="email" placeholder="Email" />
+          </div>
+
+          <div class="input">
+            <input type="password" id="loginPass" placeholder="Password" />
+            <i
+              class="fa-solid fa-eye eye"
+              onclick="toggle('loginPass', this)"
+            ></i>
+          </div>
+
+          <button onclick="loginSuccess()">Sign In</button>
+
+          <div class="switch">
+            New user? <span onclick="showSignup()">Create account</span>
+          </div>
+        </div>
+
+        <!-- SIGN UP -->
+        <div id="signup">
+          <div class="row">
+            <div class="input">
+              <input type="text" id="fname" placeholder="First Name" />
+            </div>
+            <div class="input">
+              <input type="text" id="lname" placeholder="Last Name" />
+            </div>
+          </div>
+
+          <div class="input">
+            <input type="email" id="email" placeholder="Email" />
+          </div>
+
+          <div class="input">
+            <input type="password" id="p1" placeholder="Password" />
+            <i class="fa-solid fa-eye eye" onclick="toggle('p1', this)"></i>
+          </div>
+
+          <div class="input">
+            <input type="password" id="p2" placeholder="Confirm Password" />
+            <i class="fa-solid fa-eye eye" onclick="toggle('p2', this)"></i>
+          </div>
+
+          <div class="error" id="err">Passwords do not match</div>
+
+          <button onclick="validate()">Sign Up</button>
+
+          <div class="switch">
+            Already have an account?
+            <span onclick="showSignin()">Sign In</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Create stars
+      const starsContainer = document.getElementById("starsContainer");
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.animationDelay = Math.random() * 3 + "s";
+        starsContainer.appendChild(star);
+      }
+
+      const owlBox = document.getElementById("owlBox");
+      const owlImg = document.getElementById("owlImg");
+      const bubble = document.getElementById("bubble");
+      const textTarget = document.getElementById("text");
+      const loginSection = document.querySelector(".login-section");
+
+      const sitImg =
+        "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMzEzODF2MDRtOHJyNXJkeXo0bTdwZ3RwaXpvYjF4YWgyYXYwdnZ0cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/PH8P1olwfTqwemlR5G/200.webp";
+      const message =
+        "Give me an image, and I'll transform it into learning magic! animations, comics, flowchart, quiz — in any language you want!";
+
+      // Wait for owl flying animation to complete, then show speech bubble and talk
+      setTimeout(() => {
+        owlImg.src = sitImg;
+        bubble.classList.add("active");
+        typeText();
+      }, 3500);
+
+      function typeText() {
+        let i = 0;
+        function type() {
+          if (i < message.length) {
+            textTarget.innerHTML += message.charAt(i);
+            owlImg.style.transform =
+              i % 2 === 0 ? "translateY(-3px)" : "translateY(0)";
+            i++;
+            setTimeout(type, 45);
+          } else {
+            owlImg.style.transform = "translateY(0)";
+            // Show login form after talking completes
+            setTimeout(() => {
+              loginSection.classList.add("show");
+            }, 800);
+          }
+        }
+        type();
+      }
+
+
+      // Login functions
+      function showSignup() {
+        document.getElementById("signin").style.display = "none";
+        document.getElementById("signup").style.display = "block";
+      }
+
+      function showSignin() {
+        document.getElementById("signup").style.display = "none";
+        document.getElementById("signin").style.display = "block";
+      }
+
+      function toggle(id, icon) {
+        let i = document.getElementById(id);
+        if (i.type === "password") {
+          i.type = "text";
+          icon.classList.replace("fa-eye", "fa-eye-slash");
+        } else {
+          i.type = "password";
+          icon.classList.replace("fa-eye-slash", "fa-eye");
+        }
+      }
+
+      function validate() {
+         const fname = document.getElementById("fname").value;
+         const lname = document.getElementById("lname").value;
+         const email = document.getElementById("email").value;
+         const p1 = document.getElementById("p1").value;
+         const p2 = document.getElementById("p2").value;
+
+        if (p1 !== p2) {
+           document.getElementById("err").style.display = "block";
+           return;
+        }
+
+        fetch("/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstname: fname,
+            lastname: lname,
+            email: email,
+            password: p1
+          })
+        })
+       .then(res => res.json())
+       .then(data => {
+         alert(data.msg);
+         showSignin();
+      });
+    }
+      
+
+     
+
+
+      
+  function loginSuccess() {
+    
+    const email = document.querySelector('#signin input[type="email"]').value;
+    const password = document.getElementById("loginPass").value;
+
+    fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.msg === "Login Success") {
+        window.location.href = "/home";
+    } else {
+      alert(data.msg);
+    }
+  });
+}
+
+
+
+    </script>
+  </body>
+</html>
