@@ -1,0 +1,8 @@
+open this folder in venv311 folder in this and run the following command to install the required dependencies:
+pip install -r requirements.txt
+
+to create model folder 
+
+1.add the stable diffusion module
+2. add the animediff module
+
